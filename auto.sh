@@ -3,6 +3,9 @@
 # Install
 sudo bash -c "$(curl -sL https://github.com/Gozargah/Marzban-scripts/raw/master/marzban.sh)" @ install
 
+kill -INT 888
+
+clear
 
 # create admin
 
