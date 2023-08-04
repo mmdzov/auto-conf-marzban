@@ -3,14 +3,6 @@
 # Install
 sudo bash -c "$(curl -sL https://github.com/Gozargah/Marzban-scripts/raw/master/marzban.sh)" @ install -y
 
-/usr/bin/expect <<EOD
-  set timeout 1
-  spawn echo -n ^C
-  expect -exact "^C"
-  send "\x03"
-  expect eof
-EOD
-
 clear
 # create admin
 
@@ -55,50 +47,7 @@ wget -O "$assets/geoip.dat" https://github.com/v2fly/geoip/releases/latest/downl
 wget -O "$assets/iran.dat" https://github.com/bootmortis/iran-hosted-domains/releases/latest/download/iran.dat
 
 
-routing_conf='{
-        "domainStrategy": "IPIfNonMatch",
-        "rules": [
-            {
-                "type": "field",
-                "outboundTag": "blackhole",
-                "ip": [
-                    "geoip:private",
-                    "geoip:ir"
-                ]
-            },
-            {
-                "type": "field",
-                "port": 53,
-                "network": "tcp,udp",
-                "outboundTag": "DNS-Internal"
-            },
-            {
-                "type": "field",
-                "outboundTag": "blackhole",
-                "protocol": [
-                    "bittorrent"
-                ]
-            },
-            {
-                "outboundTag": "blackhole",
-                "domain": [
-                    "regexp:.*\\.ir$",
-                    "ext:iran.dat:ir",
-                    "ext:iran.dat:other",
-                    "geosite:category-ir",
-                    "blogfa",
-                    "bank",
-                    "tebyan.net",
-                    "beytoote.com",
-                    "Film2movie.ws",
-                    "Setare.com",
-                    "downloadha.com",
-                    "Sanjesh.org"
-                ],
-                "type": "field"
-            }
-        ]
-    }'
+routing_conf='{\n        \"domainStrategy\": \"IPIfNonMatch\",\n        \"rules\": [\n            {\n                \"type\": \"field\",\n                \"outboundTag\": \"blackhole\",\n                \"ip\": [\n                    \"geoip:private\",\n                    \"geoip:ir\"\n                ]\n            },\n            {\n                \"type\": \"field\",\n                \"port\": 53,\n                \"network\": \"tcp,udp\",\n                \"outboundTag\": \"DNS-Internal\"\n            },\n            {\n                \"type\": \"field\",\n                \"outboundTag\": \"blackhole\",\n                \"protocol\": [\n                    \"bittorrent\"\n                ]\n            },\n            {\n                \"outboundTag\": \"blackhole\",\n                \"domain\": [\n                    \"regexp:.*\\\\.ir$\",\n                    \"ext:iran.dat:ir\",\n                    \"ext:iran.dat:other\",\n                    \"geosite:category-ir\",\n                    \"blogfa\",\n                    \"bank\",\n                    \"tebyan.net\",\n                    \"beytoote.com\",\n                    \"Film2movie.ws\",\n                    \"Setare.com\",\n                    \"downloadha.com\",\n                    \"Sanjesh.org\"\n                ],\n                \"type\": \"field\"\n            }\n        ]\n    }"'
 
 
 xray_config="/var/lib/marzban/xray_config.json"
