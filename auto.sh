@@ -103,4 +103,13 @@ fi
 
 marzban restart
 
+/usr/bin/expect <<EOD
+  set timeout 1
+  spawn echo -n ^C
+  expect -exact "^C"
+  send "\x03"
+  expect eof
+EOD
+
+
 echo "Happy hacking :)"
