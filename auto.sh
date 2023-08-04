@@ -52,9 +52,7 @@ routing_conf='{\n        \"domainStrategy\": \"IPIfNonMatch\",\n        \"rules\
 
 xray_config="/var/lib/marzban/xray_config.json"
 
-formatted_json=$(echo "$json" | jq -c '.')
-
-json=$(cat $xray_config)
+formatted_json=$(echo "$routing_conf" | jq -c '.')
 
 new_json=$(echo "$formatted_json" | jq --arg routing_conf "$routing_conf" '.routing = $routing_conf')
 
