@@ -20,12 +20,16 @@ marzban cli admin create --sudo
 # Get SSL
 read -p "Please enter your domain: " domain
 
-sudo apt-get install certbot -y
-certbot certonly --standalone --agree-tos --register-unsafely-without-email -d "$domain"
-certbot renew --dry-run -y
+if [ ! -d "/etc/letsencrypt/live/$domain" ]; then
+    sudo apt-get install certbot -y
+    certbot certonly --standalone --agree-tos --register-unsafely-without-email -d "$domain"
+    certbot renew --dry-run -y
+fi
+
 
 pubkey="/etc/letsencrypt/live/$domain/fullchain.pem"
 privkey="/etc/letsencrypt/live/$domain/privkey.pem"
+
 
 # /usr/bin/expect <<EOD
 #   set timeout 1
