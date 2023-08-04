@@ -14,3 +14,5 @@ sed -i 's/UVICORN_PORT = .*/UVICORN_PORT = '$port'/' $env
 sed -i 's/# UVICORN_SSL_CERTFILE = .*/UVICORN_SSL_CERTFILE = '"$pubkey"'/' $env
 
 sed -i 's/# UVICORN_SSL_KEYFILE = .*/UVICORN_SSL_KEYFILE = '"$privkey"'/' $env
+
+

@@ -13,5 +13,8 @@ source create-admin.sh
 source ssl.sh
 
 
+# ban iranian applications and websites
+source ban-iran.sh
+
 # Configure ENV
 source marzban-env.sh
