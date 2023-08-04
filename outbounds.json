@@ -1,0 +1,10 @@
+[
+  {
+    "protocol": "freedom",
+    "tag": "DIRECT"
+  },
+  {
+    "protocol": "blackhole",
+    "tag": "blackhole"
+  }
+]

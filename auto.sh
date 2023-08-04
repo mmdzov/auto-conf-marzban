@@ -18,6 +18,7 @@ marzban cli admin create --sudo
 
 
 # Get SSL
+domain=""
 read -p "Please enter your domain.com/sub.domain.com: " domain
 
 if [ ! -d "/etc/letsencrypt/live/$domain" ]; then
@@ -61,8 +62,10 @@ wget -O "$assets/iran.dat" https://github.com/bootmortis/iran-hosted-domains/rel
 xray_config="/var/lib/marzban/xray_config.json"
 
 routing_file="https://github.com/mmdzov/auto-conf-marzban/raw/main/routing.json"
+outbounds_file="https://github.com/mmdzov/auto-conf-marzban/raw/main/routing.json"
 
 jq --argfile routing "$routing_file" '.routing = $routing' "$xray_config" > tmp.json && mv tmp.json "$xray_config"
+jq --argfile outbounds "$outbounds_file" '.outbounds = $outbounds' "$xray_config" > tmp.json && mv tmp.json "$xray_config"
 
 cd /opt/marzban
 
@@ -97,6 +100,6 @@ if [[ -n $telegram_user_id ]]; then
 fi
 
 
-clear
-
 marzban restart
+
+echo "Happy hacking :)"
