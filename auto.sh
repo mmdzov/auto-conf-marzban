@@ -105,8 +105,6 @@ clear
 # Configure ENV
 env="/opt/marzban/.env"
 
-sudo nano $env
-
 read -e -p "Please enter your port: " -i 8000 port
 
 
@@ -130,5 +128,7 @@ if [[ -n $telegram_user_id ]]; then
     sed -i 's/# TELEGRAM_ADMIN_ID = .*/TELEGRAM_ADMIN_ID = '"$telegram_user_id"'/' $env
 fi
 
+
+clear
 
 marzban restart
