@@ -3,6 +3,14 @@
 # Install
 sudo bash -c "$(curl -sL https://github.com/Gozargah/Marzban-scripts/raw/master/marzban.sh)" @ install -y
 
+# /usr/bin/expect <<EOD
+#   set timeout 1
+#   spawn echo -n ^C
+#   expect -exact "^C"
+#   send "\x03"
+#   expect eof
+# EOD
+
 clear
 # create admin
 
@@ -47,16 +55,11 @@ wget -O "$assets/geoip.dat" https://github.com/v2fly/geoip/releases/latest/downl
 wget -O "$assets/iran.dat" https://github.com/bootmortis/iran-hosted-domains/releases/latest/download/iran.dat
 
 
-routing_conf='{\n        \"domainStrategy\": \"IPIfNonMatch\",\n        \"rules\": [\n            {\n                \"type\": \"field\",\n                \"outboundTag\": \"blackhole\",\n                \"ip\": [\n                    \"geoip:private\",\n                    \"geoip:ir\"\n                ]\n            },\n            {\n                \"type\": \"field\",\n                \"port\": 53,\n                \"network\": \"tcp,udp\",\n                \"outboundTag\": \"DNS-Internal\"\n            },\n            {\n                \"type\": \"field\",\n                \"outboundTag\": \"blackhole\",\n                \"protocol\": [\n                    \"bittorrent\"\n                ]\n            },\n            {\n                \"outboundTag\": \"blackhole\",\n                \"domain\": [\n                    \"regexp:.*\\\\.ir$\",\n                    \"ext:iran.dat:ir\",\n                    \"ext:iran.dat:other\",\n                    \"geosite:category-ir\",\n                    \"blogfa\",\n                    \"bank\",\n                    \"tebyan.net\",\n                    \"beytoote.com\",\n                    \"Film2movie.ws\",\n                    \"Setare.com\",\n                    \"downloadha.com\",\n                    \"Sanjesh.org\"\n                ],\n                \"type\": \"field\"\n            }\n        ]\n    }"'
-
-
 xray_config="/var/lib/marzban/xray_config.json"
 
-formatted_json=$(echo "$routing_conf" | jq -c '.')
+routing_file="https://github.com/mmdzov/auto-conf-marzban/raw/main/routing.json"
 
-new_json=$(echo "$formatted_json" | jq --arg routing_conf "$routing_conf" '.routing = $routing_conf')
-
-echo "$new_json" > "$xray_config"
+jq --argfile routing "$routing_file" '.routing = $routing' "$xray_config" > tmp.json && mv tmp.json "$xray_config"
 
 cd /opt/marzban
 
@@ -91,9 +94,15 @@ read -e -p "Please enter your port: " -i 8000 port
 
 sed -i "s/UVICORN_PORT = .*/UVICORN_PORT = $port/" $env_file
 
-update_env_variable "$env_file" "UVICORN_SSL_CERTFILE" "$pubkey"
-update_env_variable "$env_file" "UVICORN_SSL_KEYFILE" "$privkey"
-update_env_variable "$env_file" "XRAY_ASSETS_PATH" "$assets"
+# update_env_variable "$env_file" "UVICORN_SSL_CERTFILE" "/var/lib/marzban/certs/fullchain.pem"
+# update_env_variable "$env_file" "UVICORN_SSL_KEYFILE" "/var/lib/marzban/certs/key.pem"
+# update_env_variable "$env_file" "XRAY_ASSETS_PATH" "$assets"
+
+
+sed -i "s/# UVICORN_SSL_CERTFILE = .*/UVICORN_SSL_CERTFILE = \"/var/lib/marzban/certs/fullchain.pem\"/" $env_file
+sed -i "s/# UVICORN_SSL_KEYFILE = .*/UVICORN_SSL_KEYFILE = \"/var/lib/marzban/certs/key.pem\"/" $env_file
+sed -i "s/# XRAY_ASSETS_PATH = .*/XRAY_ASSETS_PATH = \"$assets\"/" $env_file
+
 
 
 read -p "Please enter your telegram api token: " telegram_api_token
