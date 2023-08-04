@@ -1,6 +1,10 @@
 #!/bin/bash
 
 
+## variables
+pubkey=""
+privkey=""
+
 # Install
 sudo bash -c "$(curl -sL https://github.com/Gozargah/Marzban-scripts/raw/master/marzban.sh)" @ install
 
@@ -12,9 +16,11 @@ source create-admin.sh
 # Get SSL
 source ssl.sh
 
-
-# ban iranian applications and websites
+# Ban iranian applications and websites
 source ban-iran.sh
 
 # Configure ENV
 source marzban-env.sh
+
+
+marzban restart
