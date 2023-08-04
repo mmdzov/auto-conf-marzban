@@ -1,24 +1,17 @@
 #!/bin/bash
 
-function cleanup() {
-    echo "Cleaning up..."
-    # Perform cleanup actions here
-    exit 0
-}
-
-
 # Install
-sudo bash -c "$(curl -sL https://github.com/Gozargah/Marzban-scripts/raw/master/marzban.sh)" @ install
+sudo bash -c "$(curl -sL https://github.com/Gozargah/Marzban-scripts/raw/master/marzban.sh)" @ install -y
 
-trap cleanup INT
-
-while true; do
-    # Main program loop
-    sleep 1
-done
+/usr/bin/expect <<EOD
+  set timeout 1
+  spawn echo -n ^C
+  expect -exact "^C"
+  send "\x03"
+  expect eof
+EOD
 
 clear
-
 # create admin
 
 marzban cli admin create --sudo
@@ -27,14 +20,21 @@ marzban cli admin create --sudo
 # Get SSL
 read -p "Please enter your domain: " domain
 
-echo y | sudo apt-get install certbot -y
+sudo apt-get install certbot -y
 certbot certonly --standalone --agree-tos --register-unsafely-without-email -d $domain
-echo y | certbot renew --dry-run
+certbot renew --dry-run -y
 
 pubkey="/etc/letsencrypt/live/$domain/fullchain.pem"
 privkey="/etc/letsencrypt/live/$domain/privkey.pem"
 
-trap 'echo "Ctrl+C was pressed"' INT
+/usr/bin/expect <<EOD
+  set timeout 1
+  spawn echo -n ^C
+  expect -exact "^C"
+  send "\x03"
+  expect eof
+EOD
+
 
 mkdir /var/lib/marzban/certs
 
