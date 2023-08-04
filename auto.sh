@@ -9,17 +9,7 @@ clear
 
 # create admin
 
-# Ask for username
-read -e -p "Please enter your username: " -i "admin" username
-
-# Ask for password
-read -e -p "Please enter your password: " -i "admin" password
-
 marzban cli admin create --sudo
-echo $username
-echo $password
-echo $password
-
 
 
 # Get SSL
@@ -38,6 +28,7 @@ mkdir /var/lib/marzban/certs
 cp "$pubkey" /var/lib/marzban/certs/fullchain.pem
 cp "$privkey" /var/lib/marzban/certs/key.pem
 
+clear
 
 # Ban iranian applications and websites
 assets="/var/lib/marzban/assets/"
@@ -99,27 +90,27 @@ routing_conf='{
 
 xray_config="/var/lib/marzban/xray_config.json"
 
-json=$(cat "$xray_config")
+json=$(cat $xray_config)
 
 new_json=$(echo "$json" | jq --arg routing_conf "$routing_conf" '.routing = $routing_conf')
 
 echo "$new_json" > "$xray_config"
 
-cd /opt/marzban || exit
+cd /opt/marzban
 
 docker compose up -d
 
-cd
+clear
 
 # Configure ENV
-env=/opt/marzban/.env
+env="/opt/marzban/.env"
 
 sudo nano $env
 
 read -e -p "Please enter your port: " -i 8000 port
 
 
-sed -i 's/UVICORN_PORT = .*/UVICORN_PORT = '$port'/' $env
+sed -i 's/UVICORN_PORT = .*/UVICORN_PORT = '"$port"'/' $env
 
 sed -i 's/# UVICORN_SSL_CERTFILE = .*/UVICORN_SSL_CERTFILE = '"$pubkey"'/' $env
 
