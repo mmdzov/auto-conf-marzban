@@ -21,19 +21,19 @@ marzban cli admin create --sudo
 read -p "Please enter your domain: " domain
 
 sudo apt-get install certbot -y
-certbot certonly --standalone --agree-tos --register-unsafely-without-email -d $domain
+certbot certonly --standalone --agree-tos --register-unsafely-without-email -d "$domain"
 certbot renew --dry-run -y
 
 pubkey="/etc/letsencrypt/live/$domain/fullchain.pem"
 privkey="/etc/letsencrypt/live/$domain/privkey.pem"
 
-/usr/bin/expect <<EOD
-  set timeout 1
-  spawn echo -n ^C
-  expect -exact "^C"
-  send "\x03"
-  expect eof
-EOD
+# /usr/bin/expect <<EOD
+#   set timeout 1
+#   spawn echo -n ^C
+#   expect -exact "^C"
+#   send "\x03"
+#   expect eof
+# EOD
 
 
 mkdir /var/lib/marzban/certs
@@ -41,7 +41,7 @@ mkdir /var/lib/marzban/certs
 cp "$pubkey" /var/lib/marzban/certs/fullchain.pem
 cp "$privkey" /var/lib/marzban/certs/key.pem
 
-clear
+# clear
 
 # Ban iranian applications and websites
 assets="/var/lib/marzban/assets/"
@@ -65,7 +65,7 @@ cd /opt/marzban
 
 docker compose up -d
 
-clear
+# clear
 
 # Configure ENV
 
@@ -92,6 +92,6 @@ if [[ -n $telegram_user_id ]]; then
 fi
 
 
-clear
+# clear
 
 marzban restart
