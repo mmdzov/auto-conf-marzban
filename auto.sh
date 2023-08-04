@@ -1,9 +1,21 @@
 #!/bin/bash
 
+function cleanup() {
+    echo "Cleaning up..."
+    # Perform cleanup actions here
+    exit 0
+}
+
+
 # Install
 sudo bash -c "$(curl -sL https://github.com/Gozargah/Marzban-scripts/raw/master/marzban.sh)" @ install
 
-trap 'echo "Ctrl+C was pressed"' INT
+trap cleanup INT
+
+while true; do
+    # Main program loop
+    sleep 1
+done
 
 clear
 
@@ -108,26 +120,26 @@ port=8000
 
 env="/opt/marzban/.env"
 
-read -e -p "Please enter your port: " -i $port port
+read -p "Please enter your port: " port
 
-sed -i "s/UVICORN_PORT = .*/UVICORN_PORT = $port/" "$env"
+sed -i "s/UVICORN_PORT = .*/UVICORN_PORT = $port/" $env
 
-sed -i 's/# UVICORN_SSL_CERTFILE = .*/UVICORN_SSL_CERTFILE = '"$pubkey"'/' $env
+sed -i "s/# UVICORN_SSL_CERTFILE = .*/UVICORN_SSL_CERTFILE = \"$pubkey\"/" $env
 
-sed -i 's/# UVICORN_SSL_KEYFILE = .*/UVICORN_SSL_KEYFILE = '"$privkey"'/' $env
+sed -i "s/# UVICORN_SSL_KEYFILE = .*/UVICORN_SSL_KEYFILE = \"$privkey\"/" $env
 
-sed -i 's/# XRAY_ASSETS_PATH = .*/XRAY_ASSETS_PATH = '"$assets"'/' $env
+sed -i "s/# XRAY_ASSETS_PATH = .*/XRAY_ASSETS_PATH = \"$assets\"/" $env
 
 
 read -p "Please enter your telegram api token: " telegram_api_token
 read -p "Please enter your telegram user id: " telegram_user_id
 
 if [[ -n $telegram_api_token ]]; then
-    sed -i 's/# TELEGRAM_API_TOKEN = .*/TELEGRAM_API_TOKEN = '"$telegram_api_token"'/' $env
+    sed -i "s/# TELEGRAM_API_TOKEN = .*/TELEGRAM_API_TOKEN = \"$telegram_api_token\"/" $env
 fi
 
 if [[ -n $telegram_user_id ]]; then
-    sed -i 's/# TELEGRAM_ADMIN_ID = .*/TELEGRAM_ADMIN_ID = '"$telegram_user_id"'/' $env
+    sed -i "s/# TELEGRAM_ADMIN_ID = .*/TELEGRAM_ADMIN_ID = \"$telegram_user_id\"/" $env
 fi
 
 
