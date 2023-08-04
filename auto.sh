@@ -103,9 +103,11 @@ routing_conf='{
 
 xray_config="/var/lib/marzban/xray_config.json"
 
+formatted_json=$(echo "$json" | jq -c '.')
+
 json=$(cat $xray_config)
 
-new_json=$(echo "$json" | jq --arg routing_conf "$routing_conf" '.routing = $routing_conf')
+new_json=$(echo "$formatted_json" | jq --arg routing_conf "$routing_conf" '.routing = $routing_conf')
 
 echo "$new_json" > "$xray_config"
 
