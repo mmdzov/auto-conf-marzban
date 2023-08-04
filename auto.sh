@@ -3,7 +3,7 @@
 # Install
 sudo bash -c "$(curl -sL https://github.com/Gozargah/Marzban-scripts/raw/master/marzban.sh)" @ install
 
-kill -9 888
+trap 'echo "Ctrl+C was pressed"' INT
 
 clear
 
@@ -21,6 +21,8 @@ echo y | certbot renew --dry-run
 
 pubkey="/etc/letsencrypt/live/$domain/fullchain.pem"
 privkey="/etc/letsencrypt/live/$domain/privkey.pem"
+
+trap 'echo "Ctrl+C was pressed"' INT
 
 mkdir /var/lib/marzban/certs
 
