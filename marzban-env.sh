@@ -15,7 +15,7 @@ sed -i 's/# UVICORN_SSL_CERTFILE = .*/UVICORN_SSL_CERTFILE = '"${pubkey}"'/' $en
 
 sed -i 's/# UVICORN_SSL_KEYFILE = .*/UVICORN_SSL_KEYFILE = '"${privkey}"'/' $env
 
-sed -i 's/# XRAY_ASSETS_PATH = .*/XRAY_ASSETS_PATH = '"$assets"'/' $env
+sed -i 's/# XRAY_ASSETS_PATH = .*/XRAY_ASSETS_PATH = '"${assets}"'/' $env
 
 
 read -p "Please enter your telegram api token: " telegram_api_token

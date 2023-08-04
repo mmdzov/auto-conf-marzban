@@ -4,6 +4,9 @@
 ## variables
 pubkey=""
 privkey=""
+assets="/var/lib/marzban/assets/"
+
+
 
 # Install
 sudo bash -c "$(curl -sL https://github.com/Gozargah/Marzban-scripts/raw/master/marzban.sh)" @ install
