@@ -20,7 +20,6 @@ certbot certonly --standalone --agree-tos --register-unsafely-without-email -d $
 echo y | certbot renew --dry-run
 
 pubkey="/etc/letsencrypt/live/$domain/fullchain.pem"
-
 privkey="/etc/letsencrypt/live/$domain/privkey.pem"
 
 mkdir /var/lib/marzban/certs
@@ -103,12 +102,13 @@ docker compose up -d
 clear
 
 # Configure ENV
+port=8000
+
 env="/opt/marzban/.env"
 
-read -e -p "Please enter your port: " -i 8000 port
+read -e -p "Please enter your port: " -i $port port
 
-
-sed -i 's/UVICORN_PORT = .*/UVICORN_PORT = '"$port"'/' $env
+sed -i "s/UVICORN_PORT = .*/UVICORN_PORT = $port/" "$env"
 
 sed -i 's/# UVICORN_SSL_CERTFILE = .*/UVICORN_SSL_CERTFILE = '"$pubkey"'/' $env
 
