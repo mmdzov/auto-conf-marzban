@@ -18,7 +18,7 @@ marzban cli admin create --sudo
 
 
 # Get SSL
-read -p "Please enter your domain: " domain
+read -p "Please enter your domain.com/sub.domain.com: " domain
 
 if [ ! -d "/etc/letsencrypt/live/$domain" ]; then
     sudo apt-get install certbot -y
@@ -75,9 +75,11 @@ docker compose up -d
 
 env_file="/opt/marzban/.env"
 
-read -e -p "Please enter your port: " -i 8000 port
+read -p "Please enter your port: " port
 
-sed -i "s/UVICORN_PORT = .*/UVICORN_PORT = $port/" $env_file
+if [[ -n $port ]]; then
+    sed -i "s/UVICORN_PORT = .*/UVICORN_PORT = $port/" $env_file
+fi
 
 sed -i 's/# UVICORN_SSL_CERTFILE = "\/var\/lib\/marzban\/certs\/example.com\/fullchain.pem"/UVICORN_SSL_CERTFILE = "\/var\/lib\/marzban\/certs\/fullchain.pem"/' $env_file
 sed -i 's/# UVICORN_SSL_KEYFILE = "\/var\/lib\/marzban\/certs\/example.com\/key.pem"/UVICORN_SSL_KEYFILE = "\/var\/lib\/marzban\/certs\/key.pem"/' $env_file
