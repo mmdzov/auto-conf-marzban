@@ -116,19 +116,35 @@ docker compose up -d
 clear
 
 # Configure ENV
-port=8000
+update_env_variable() {
+  local env_file="$1"
+  local variable_name="$2"
+  local new_value="$3"
 
-env="/opt/marzban/.env"
+  while IFS= read -r line; do
+    if [[ $line == \#* ]]; then
+      echo "$line"
+    else
+      if [[ $line == "$variable_name="* ]]; then
+        echo "$variable_name=$new_value"
+      else
+        echo "$line"
+      fi
+    fi
+  done < "$env_file" > temp_env && mv temp_env "$env_file"
 
-read -p "Please enter your port: " port
+  echo "Variable $variable_name was updated with value $new_value in file $env_file."
+}
 
-sed -i "s/UVICORN_PORT = .*/UVICORN_PORT = $port/" $env
+env_file="/opt/marzban/.env"
 
-sed -i "s/# UVICORN_SSL_CERTFILE = .*/UVICORN_SSL_CERTFILE = \"$pubkey\"/" $env
+read -e -p "Please enter your port: " -i 8000 port
 
-sed -i "s/# UVICORN_SSL_KEYFILE = .*/UVICORN_SSL_KEYFILE = \"$privkey\"/" $env
+sed -i "s/UVICORN_PORT = .*/UVICORN_PORT = $port/" $env_file
 
-sed -i "s/# XRAY_ASSETS_PATH = .*/XRAY_ASSETS_PATH = \"$assets\"/" $env
+update_env_variable "$env_file" "UVICORN_SSL_CERTFILE" "$pubkey"
+update_env_variable "$env_file" "UVICORN_SSL_KEYFILE" "$privkey"
+update_env_variable "$env_file" "XRAY_ASSETS_PATH" "$assets"
 
 
 read -p "Please enter your telegram api token: " telegram_api_token
