@@ -23,7 +23,7 @@ read -p "Please enter your domain.com/sub.domain.com: " domain
 if [ ! -d "/etc/letsencrypt/live/$domain" ]; then
     sudo apt-get install certbot -y
     certbot certonly --standalone --agree-tos --register-unsafely-without-email -d "$domain"
-    certbot renew --dry-run -y
+    certbot renew --dry-run
 fi
 
 
