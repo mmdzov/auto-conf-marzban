@@ -68,25 +68,6 @@ docker compose up -d
 clear
 
 # Configure ENV
-update_env_variable() {
-  local env_file="$1"
-  local variable_name="$2"
-  local new_value="$3"
-
-  while IFS= read -r line; do
-    if [[ $line == \#* ]]; then
-      echo "$line"
-    else
-      if [[ $line == "$variable_name="* ]]; then
-        echo "$variable_name=$new_value"
-      else
-        echo "$line"
-      fi
-    fi
-  done < "$env_file" > temp_env && mv temp_env "$env_file"
-
-  echo "Variable $variable_name was updated with value $new_value in file $env_file."
-}
 
 env_file="/opt/marzban/.env"
 
@@ -94,26 +75,20 @@ read -e -p "Please enter your port: " -i 8000 port
 
 sed -i "s/UVICORN_PORT = .*/UVICORN_PORT = $port/" $env_file
 
-# update_env_variable "$env_file" "UVICORN_SSL_CERTFILE" "/var/lib/marzban/certs/fullchain.pem"
-# update_env_variable "$env_file" "UVICORN_SSL_KEYFILE" "/var/lib/marzban/certs/key.pem"
-# update_env_variable "$env_file" "XRAY_ASSETS_PATH" "$assets"
+sed -i 's/# UVICORN_SSL_CERTFILE = "\/var\/lib\/marzban\/certs\/example.com\/fullchain.pem"/UVICORN_SSL_CERTFILE = "\/var\/lib\/marzban\/certs\/fullchain.pem"/' $env_file
+sed -i 's/# UVICORN_SSL_KEYFILE = "\/var\/lib\/marzban\/certs\/example.com\/key.pem"/UVICORN_SSL_KEYFILE = "\/var\/lib\/marzban\/certs\/key.pem"/' $env_file
 
-
-sed -i "s/# UVICORN_SSL_CERTFILE = .*/UVICORN_SSL_CERTFILE = \"/var/lib/marzban/certs/fullchain.pem\"/" $env_file
-sed -i "s/# UVICORN_SSL_KEYFILE = .*/UVICORN_SSL_KEYFILE = \"/var/lib/marzban/certs/key.pem\"/" $env_file
-sed -i "s/# XRAY_ASSETS_PATH = .*/XRAY_ASSETS_PATH = \"$assets\"/" $env_file
-
-
+sed -i 's/# XRAY_ASSETS_PATH = "\/usr\/local\/share\/xray"/XRAY_ASSETS_PATH = "\/var\/lib\/marzban\/assets\/"/' $env_file
 
 read -p "Please enter your telegram api token: " telegram_api_token
 read -p "Please enter your telegram user id: " telegram_user_id
 
 if [[ -n $telegram_api_token ]]; then
-    update_env_variable "$env_file" "TELEGRAM_API_TOKEN" "$telegram_api_token"
+    sed -i 's/# TELEGRAM_API_TOKEN = "123456789:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/TELEGRAM_API_TOKEN = "'"$telegram_api_token"'"/' $env_file
 fi
 
 if [[ -n $telegram_user_id ]]; then
-    update_env_variable "$env_file" "TELEGRAM_ADMIN_ID" "$telegram_user_id"
+    sed -i 's/# TELEGRAM_ADMIN_ID = "987654321"/TELEGRAM_ADMIN_ID = "'"$telegram_user_id"'"/' $env_file
 fi
 
 
