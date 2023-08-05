@@ -2,6 +2,6 @@
 
 sudo apt update
 
-sudo apt install expect -y
-sudo apt install jq -y
+sudo apt install expect
+sudo apt install jq
 
