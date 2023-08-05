@@ -33,23 +33,19 @@ if [[ -n $domain && ! -d "/etc/letsencrypt/live/$domain" ]]; then
     pubkey="/etc/letsencrypt/live/$domain/fullchain.pem"
     privkey="/etc/letsencrypt/live/$domain/privkey.pem"
     
+fi
 
-/usr/bin/expect <<EOD
-  set timeout 1
-  spawn echo -n ^C
-  expect -exact "^C"
-  send "\x03"
-  expect eof
-EOD
+if [[ -n $domain ]]; then 
+    pubkey="/etc/letsencrypt/live/$domain/fullchain.pem"
+    privkey="/etc/letsencrypt/live/$domain/privkey.pem"
 
-mkdir /var/lib/marzban/certs
+    mkdir /var/lib/marzban/certs
 
-cp "$pubkey" /var/lib/marzban/certs/fullchain.pem
-cp "$privkey" /var/lib/marzban/certs/key.pem
+    cp "$pubkey" /var/lib/marzban/certs/fullchain.pem
+    cp "$privkey" /var/lib/marzban/certs/key.pem
+fi
 
 clear
-
-fi
 
 # Ban iranian applications and websites
 assets="/var/lib/marzban/assets/"
@@ -188,8 +184,5 @@ if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
     mv tmp.json $v2iplimit_file
 
 fi
-
-# Restart marzban
-marzban restart
 
 echo "Happy hacking :)"
