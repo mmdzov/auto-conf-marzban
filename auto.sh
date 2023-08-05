@@ -67,9 +67,7 @@ xray_config="/var/lib/marzban/xray_config.json"
 curl -o routing.json https://raw.githubusercontent.com/mmdzov/auto-conf-marzban/main/routing.json
 curl -o outbounds.json https://raw.githubusercontent.com/mmdzov/auto-conf-marzban/main/outbounds.json
 
-# jq --argjson newRouting "$(cat routing.json)" '.routing = $newRouting' $xray_config > temp_config.json
-# jq --argjson newOutbounds "$(cat outbounds.json)" '.outbounds = $newOutbounds' $xray_config > temp_config.json
-jq --argfile newRouting routing.json --argfile newOutbounds outbounds.json '.routing = $newRouting | .outbounds += $newOutbounds' $xray_config > temp_config.json
+jq --argfile newRouting routing.json --argfile newOutbounds outbounds.json '.routing = $newRouting | .outbounds = $newOutbounds' $xray_config > temp_config.json
 
 mv temp_config.json $xray_config
 
