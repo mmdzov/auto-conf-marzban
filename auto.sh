@@ -10,6 +10,14 @@ sudo apt install expect
 # Install
 sudo bash -c "$(curl -sL https://github.com/Gozargah/Marzban-scripts/raw/master/marzban.sh)" @ install -y
 
+/usr/bin/expect <<EOD
+  set timeout 1
+  spawn echo -n ^C
+  expect -exact "^C"
+  send "\x03"
+  expect eof
+EOD
+
 clear
 
 # Create admin
