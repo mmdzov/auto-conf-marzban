@@ -1,11 +1,6 @@
 #!/bin/bash
-#!/usr/bin/expect
 
 cd
-
-clear
-
-sudo apt install expect
 
 # Install
 sudo bash -c "$(curl -sL https://github.com/Gozargah/Marzban-scripts/raw/master/marzban.sh)" @ install -y
