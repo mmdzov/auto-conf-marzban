@@ -8,8 +8,8 @@ clear
 sudo bash -c "$(curl -sL https://github.com/Gozargah/Marzban-scripts/raw/master/marzban.sh)" @ install -y
 
 clear
-# create admin
 
+# Create admin
 marzban cli admin create --sudo
 
 
@@ -60,9 +60,9 @@ xray_config="/var/lib/marzban/xray_config.json"
 curl -o routing.json https://raw.githubusercontent.com/mmdzov/auto-conf-marzban/main/routing.json
 curl -o outbounds.json https://raw.githubusercontent.com/mmdzov/auto-conf-marzban/main/outbounds.json
 
-jq --argjson newRouting "$(cat routing.json)" '.routing = $newRouting' $xray_config > temp_config.json
-jq --argjson newOutbounds "$(cat outbounds.json)" '.outbounds = $newOutbounds' $xray_config > temp_config.json
-
+# jq --argjson newRouting "$(cat routing.json)" '.routing = $newRouting' $xray_config > temp_config.json
+# jq --argjson newOutbounds "$(cat outbounds.json)" '.outbounds = $newOutbounds' $xray_config > temp_config.json
+jq --argfile newRouting routing.json --argfile newOutbounds outbounds.json '.routing = $newRouting | .outbounds += $newOutbounds' $xray_config > temp_config.json
 
 mv temp_config.json $xray_config
 
@@ -72,8 +72,8 @@ docker compose up -d
 
 clear
 
-# Configure ENV
 
+# Configure ENV
 env_file="/opt/marzban/.env"
 
 read -p "Please enter your port: " port
@@ -99,6 +99,31 @@ if [[ -n $telegram_user_id ]]; then
 fi
 
 
+clear
+
+cd
+
+# Install BBR2
+bbr2="y"
+read -p "Do you want to limit the number of connected users? [y/n]: " bbr2
+
+if [[ "$bbr2" == "y" || "$bbr2" == "Y" ]]; then
+
+    sudo apt update
+
+    git clone https://github.com/linhua55/bbr2.git
+
+    cd bbr2
+
+    sudo chmod +x install.sh
+
+    sudo ./install.sh
+
+    clear
+
+fi
+
+# Restart marzban
 marzban restart
 
 echo "Happy hacking :)"
