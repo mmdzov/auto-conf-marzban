@@ -66,10 +66,11 @@ wget -O "$assets/iran.dat" https://github.com/bootmortis/iran-hosted-domains/rel
 xray_config="/var/lib/marzban/xray_config.json"
 
 curl -o routing.json https://raw.githubusercontent.com/mmdzov/auto-conf-marzban/main/routing.json
-jq --argfile routing routing.json '.routing = $routing' $xray_config > temp_config.json
+
+jq -s '.[0].routing = .[1].routing' $xray_config routing.json > temp_config.json
 
 curl -o outbounds.json https://raw.githubusercontent.com/mmdzov/auto-conf-marzban/main/outbounds.json
-jq --argfile outbounds outbounds.json '.outbounds = $outbounds' $xray_config > temp_config.json
+jq -s '.[0].outbounds = .[1].outbounds' $xray_config outbounds.json > temp_config.json
 
 mv temp_config.json $xray_config
 
