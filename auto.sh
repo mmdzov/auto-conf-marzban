@@ -1,8 +1,11 @@
 #!/bin/bash
+#!/usr/bin/expect
 
 cd
 
 clear
+
+sudo apt install expect
 
 # Install
 sudo bash -c "$(curl -sL https://github.com/Gozargah/Marzban-scripts/raw/master/marzban.sh)" @ install -y
@@ -24,8 +27,14 @@ while [[ -z "$password" ]]; do
     password="$default_password"
 done
 
-marzban cli admin create --sudo
-
+spawn marzban cli admin create --sudo
+expect "Username: "
+send "$username\r"
+expect "Password: "
+send "$password\r"
+expect "Repeat for confirmation: "
+send "$password\r"
+interact
 
 # Get SSL
 pubkey="/etc/letsencrypt/live/example.com/fullchain.pem"
@@ -141,7 +150,36 @@ if [[ "$bbr2" == "y" || "$bbr2" == "Y" ]]; then
 
 fi
 
+# Limit users
+limit_user="y"
+read -p "Do you want to limit the number of connected users? [y/n]: " limit_user
 
+if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
+
+    sudo apt update
+
+    apt install python3-pip
+
+    pip install websockets
+
+    pip install pytz
+
+    git clone https://github.com/houshmand-2005/V2IpLimit.git
+
+    cd V2IpLimit
+
+    cd Marzban
+
+
+    default_limit_number=2
+    read -p "Enter the limit number: " limit_number
+
+    if [[ -n $limit_number ]]; then
+        sed -i 's/# TELEGRAM_ADMIN_ID = "987654321"/TELEGRAM_ADMIN_ID = "'"$telegram_user_id"'"/' $env_file
+    fi
+
+
+fi
 
 
 # Restart marzban
