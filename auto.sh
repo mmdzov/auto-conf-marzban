@@ -105,9 +105,11 @@ env_file="/opt/marzban/.env"
 
 read -p "Please enter your port: " port
 
-if [[ -n $port ]]; then
-    sed -i "s/UVICORN_PORT = .*/UVICORN_PORT = $port/" $env_file
+if [[ -z $port ]]; then 
+    port=8000
 fi
+
+sed -i "s/UVICORN_PORT = .*/UVICORN_PORT = $port/" $env_file
 
 sed -i 's/# UVICORN_SSL_CERTFILE = "\/var\/lib\/marzban\/certs\/example.com\/fullchain.pem"/UVICORN_SSL_CERTFILE = "\/var\/lib\/marzban\/certs\/fullchain.pem"/' $env_file
 sed -i 's/# UVICORN_SSL_KEYFILE = "\/var\/lib\/marzban\/certs\/example.com\/key.pem"/UVICORN_SSL_KEYFILE = "\/var\/lib\/marzban\/certs\/key.pem"/' $env_file
@@ -170,17 +172,26 @@ if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
 
     cd Marzban
 
+    clear
 
     default_limit_number=2
     read -p "Enter the limit number: " limit_number
 
-    if [[ -n $limit_number ]]; then
-        sed -i 's/# TELEGRAM_ADMIN_ID = "987654321"/TELEGRAM_ADMIN_ID = "'"$telegram_user_id"'"/' $env_file
-    fi
+    while [[ -z "$limit_number" ]]; do
+        limit_number="$default_limit_number"
+    done        
 
+
+    v2iplimit_file="v2iplimit_config.json"
+
+    jq ".LIMIT_NUMBER = $limit_number" $v2iplimit_file > tmp.json 
+    jq '.PANEL_USERNAME = "'"$username"'"' $v2iplimit_file > tmp.json 
+    jq '.PANEL_PASSWORD = "'"$password"'"' $v2iplimit_file > tmp.json 
+    jq '.PANEL_DOMAIN = "'"$domain:$port"'"' $v2iplimit_file > tmp.json 
+
+    mv tmp.json $v2iplimit_file
 
 fi
-
 
 # Restart marzban
 marzban restart
