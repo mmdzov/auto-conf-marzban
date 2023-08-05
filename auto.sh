@@ -194,6 +194,8 @@ if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
 
 fi
 
+
+# Remove extra files
 cd
 rm -rf tmp.json
 rm -rf outbounds.json
