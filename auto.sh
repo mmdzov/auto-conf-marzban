@@ -13,28 +13,8 @@ sudo bash -c "$(curl -sL https://github.com/Gozargah/Marzban-scripts/raw/master/
 clear
 
 # Create admin
-default_username="admin"
-default_password="admin"
+marzban cli admin create --sudo
 
-read -p "Username: " username
-read -p "Password: " username
-
-while [[ -z "$username" ]]; do
-    username="$default_username"
-done
-
-while [[ -z "$password" ]]; do
-    password="$default_password"
-done
-
-spawn marzban cli admin create --sudo
-expect "Username: "
-send "$username\r"
-expect "Password: "
-send "$password\r"
-expect "Repeat for confirmation: "
-send "$password\r"
-interact
 
 # Get SSL
 pubkey="/etc/letsencrypt/live/example.com/fullchain.pem"
@@ -180,6 +160,20 @@ if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
     while [[ -z "$limit_number" ]]; do
         limit_number="$default_limit_number"
     done        
+
+    default_username="admin"
+    default_password="admin"
+
+    read -p "Username: " username
+    read -s -p "Password: " password
+
+    while [[ -z "$username" ]]; do
+        username="$default_username"
+    done
+
+    while [[ -z "$password" ]]; do
+        password="$default_password"
+    done
 
 
     v2iplimit_file="v2iplimit_config.json"
