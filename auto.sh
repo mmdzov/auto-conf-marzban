@@ -10,22 +10,39 @@ sudo bash -c "$(curl -sL https://github.com/Gozargah/Marzban-scripts/raw/master/
 clear
 
 # Create admin
+default_username="admin"
+default_password="admin"
+
+read -p "Username: " username
+read -p "Password: " username
+
+while [[ -z "$username" ]]; do
+    username="$default_username"
+done
+
+while [[ -z "$password" ]]; do
+    password="$default_password"
+done
+
 marzban cli admin create --sudo
 
 
 # Get SSL
-domain=""
+pubkey="/etc/letsencrypt/live/example.com/fullchain.pem"
+privkey="/etc/letsencrypt/live/example.com/privkey.pem"
+
 read -p "Please enter your domain.com/sub.domain.com: " domain
 
-if [ ! -d "/etc/letsencrypt/live/$domain" ]; then
+
+if [[ -n $domain && ! -d "/etc/letsencrypt/live/$domain" ]]; then
+    
     sudo apt-get install certbot -y
     certbot certonly --standalone --agree-tos --register-unsafely-without-email -d "$domain"
     certbot renew --dry-run
-fi
-
-
-pubkey="/etc/letsencrypt/live/$domain/fullchain.pem"
-privkey="/etc/letsencrypt/live/$domain/privkey.pem"
+    
+    pubkey="/etc/letsencrypt/live/$domain/fullchain.pem"
+    privkey="/etc/letsencrypt/live/$domain/privkey.pem"
+    
 
 /usr/bin/expect <<EOD
   set timeout 1
@@ -35,13 +52,14 @@ privkey="/etc/letsencrypt/live/$domain/privkey.pem"
   expect eof
 EOD
 
-
 mkdir /var/lib/marzban/certs
 
 cp "$pubkey" /var/lib/marzban/certs/fullchain.pem
 cp "$privkey" /var/lib/marzban/certs/key.pem
 
 clear
+
+fi
 
 # Ban iranian applications and websites
 assets="/var/lib/marzban/assets/"
@@ -122,6 +140,9 @@ if [[ "$bbr2" == "y" || "$bbr2" == "Y" ]]; then
     clear
 
 fi
+
+
+
 
 # Restart marzban
 marzban restart
