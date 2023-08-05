@@ -179,4 +179,10 @@ if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
 
 fi
 
+cd
+rm -rf tmp.json
+rm -rf outbounds.json
+rm -rf routing.json
+
+
 echo "Happy hacking :)"
