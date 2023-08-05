@@ -150,24 +150,24 @@ if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
     default_username="admin"
     default_password="admin"
 
-    read -p "Username: " username
-    read -s -p "Password: " password
+    read -p "Username: " Username
+    read -s -p "Password: " Password
 
 
-    if [[ -z $username ]]; then 
-        username="$default_username"
+    if [[ -z $Username ]]; then 
+        Username="$default_username"
     fi
     
-    if [[ -z $password ]]; then 
-        password="$default_password"
+    if [[ -z $Password ]]; then 
+        Password="$default_password"
     fi
 
 
     v2iplimit_file="v2iplimit_config.json"
 
     jq ".LIMIT_NUMBER = $limit_number" $v2iplimit_file > tmp.json 
-    jq '.PANEL_USERNAME = "'"$username"'"' $v2iplimit_file > tmp.json 
-    jq '.PANEL_PASSWORD = "'"$password"'"' $v2iplimit_file > tmp.json 
+    jq '.PANEL_USERNAME = "'"$Username"'"' $v2iplimit_file > tmp.json 
+    jq '.PANEL_PASSWORD = "'"$Password"'"' $v2iplimit_file > tmp.json 
     jq '.PANEL_DOMAIN = "'"$domain:$port"'"' $v2iplimit_file > tmp.json 
 
     mv tmp.json $v2iplimit_file
@@ -180,4 +180,5 @@ rm -rf outbounds.json
 rm -rf routing.json
 
 
+echo "\r"
 echo "Happy hacking :)"
