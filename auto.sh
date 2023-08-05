@@ -127,72 +127,72 @@ else
 fi
 
 
-# Limit users
-read -p "Do you want to limit the number of connected users? [y/n]: " limit_user
+# # Limit users
+# read -p "Do you want to limit the number of connected users? [y/n]: " limit_user
 
-default_limit_user="y"
+# default_limit_user="y"
 
-if [[ -z $limit_user ]]; then 
-    limit_user="$default_limit_user"
-fi
+# if [[ -z $limit_user ]]; then 
+#     limit_user="$default_limit_user"
+# fi
 
-if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
+# if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
 
-    if [[ ! -d "/root/V2IpLimit" ]]; then
+#     if [[ ! -d "/root/V2IpLimit" ]]; then
 
-        sudo apt update
+#         sudo apt update
 
-        apt install python3-pip
+#         apt install python3-pip
 
-        pip install websockets
+#         pip install websockets
 
-        pip install pytz
+#         pip install pytz
 
-        git clone https://github.com/houshmand-2005/V2IpLimit.git
+#         git clone https://github.com/houshmand-2005/V2IpLimit.git
 
-        cd V2IpLimit
+#         cd V2IpLimit
 
-        cd Marzban
+#         cd Marzban
 
-    else 
-        cd /root/V2IpLimit/Marzban
-    fi
+#     else 
+#         cd /root/V2IpLimit/Marzban
+#     fi
     
 
-    default_limit_number=2
-    read -p "Enter the limit number: " limit_number
+#     default_limit_number=2
+#     read -p "Enter the limit number: " limit_number
 
-    if [[ -z $limit_number ]]; then 
-        limit_number="$default_limit_number"
-    fi
-
-
-    default_username="admin"
-    default_password="admin"
-
-    read -p "Username: " Username
-    read -s -p "Password: " Password
+#     if [[ -z $limit_number ]]; then 
+#         limit_number="$default_limit_number"
+#     fi
 
 
-    if [[ -z $Username ]]; then 
-        Username="$default_username"
-    fi
+#     default_username="admin"
+#     default_password="admin"
+
+#     read -p "Username: " Username
+#     read -s -p "Password: " Password
+
+
+#     if [[ -z $Username ]]; then 
+#         Username="$default_username"
+#     fi
     
-    if [[ -z $Password ]]; then 
-        Password="$default_password"
-    fi
+#     if [[ -z $Password ]]; then 
+#         Password="$default_password"
+#     fi
 
 
-    v2iplimit_file="v2iplimit_config.json"
+#     v2iplimit_file="v2iplimit_config.json"
 
-    jq ".LIMIT_NUMBER = $limit_number" $v2iplimit_file > tmp.json 
-    jq '.PANEL_USERNAME = "'"$Username"'"' $v2iplimit_file > tmp.json 
-    jq '.PANEL_PASSWORD = "'"$Password"'"' $v2iplimit_file > tmp.json 
-    jq '.PANEL_DOMAIN = "'"$domain:$port"'"' $v2iplimit_file > tmp.json 
+#     jq ".LIMIT_NUMBER = $limit_number" $v2iplimit_file > tmp.json 
+#     jq '.PANEL_USERNAME = "'"$Username"'"' $v2iplimit_file > tmp.json 
+#     jq '.PANEL_PASSWORD = "'"$Password"'"' $v2iplimit_file > tmp.json 
+#     jq '.PANEL_DOMAIN = "'"$domain:$port"'"' $v2iplimit_file > tmp.json 
 
-    mv tmp.json $v2iplimit_file
+#     mv tmp.json $v2iplimit_file
 
-fi
+# fi
 
 
 # Remove extra files
