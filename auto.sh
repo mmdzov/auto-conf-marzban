@@ -118,9 +118,9 @@ read -p "Do you want to install bbr2? [y/n]: " bbr2
 
 default_bbr2="y"
 
-while [[ -z "$bbr2" ]]; do
+if [[ -z $bbr2 ]]; then 
     bbr2="$default_bbr2"
-done
+fi
 
 if [[ "$bbr2" == "y" || "$bbr2" == "Y" ]]; then
 
@@ -143,9 +143,9 @@ read -p "Do you want to limit the number of connected users? [y/n]: " limit_user
 
 default_limit_user="y"
 
-while [[ -z "$limit_user" ]]; do
+if [[ -z $limit_user ]]; then 
     limit_user="$default_limit_user"
-done
+fi
 
 if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
 
@@ -166,9 +166,10 @@ if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
     default_limit_number=2
     read -p "Enter the limit number: " limit_number
 
-    while [[ -z "$limit_number" ]]; do
+    if [[ -z $limit_number ]]; then 
         limit_number="$default_limit_number"
-    done        
+    fi
+
 
     default_username="admin"
     default_password="admin"
@@ -176,13 +177,14 @@ if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
     read -p "Username: " username
     read -s -p "Password: " password
 
-    while [[ -z "$username" ]]; do
-        username="$default_username"
-    done
 
-    while [[ -z "$password" ]]; do
+    if [[ -z $username ]]; then 
+        username="$default_username"
+    fi
+    
+    if [[ -z $password ]]; then 
         password="$default_password"
-    done
+    fi
 
 
     v2iplimit_file="v2iplimit_config.json"
