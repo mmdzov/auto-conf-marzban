@@ -10,13 +10,6 @@ sudo apt install expect
 # Install
 sudo bash -c "$(curl -sL https://github.com/Gozargah/Marzban-scripts/raw/master/marzban.sh)" @ install -y
 
-/usr/bin/expect <<EOD
-  set timeout 1
-  spawn echo -n ^C
-  expect -exact "^C"
-  send "\x03"
-  expect eof
-EOD
 
 clear
 
@@ -130,15 +123,7 @@ fi
 
 if [[ "$bbr2" == "y" || "$bbr2" == "Y" ]]; then
 
-    sudo apt update
-
-    git clone https://github.com/linhua55/bbr2.git
-
-    cd bbr2
-
-    sudo chmod +x install.sh
-
-    sudo ./install.sh
+    wget --no-check-certificate -q -O bbr2.sh "https://github.com/yeyingorg/bbr2.sh/raw/master/bbr2.sh" && chmod +x bbr2.sh && bash bbr2.sh
 
     clear
 
