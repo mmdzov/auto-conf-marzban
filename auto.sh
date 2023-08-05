@@ -119,7 +119,7 @@ read -p "Do you want to install bbr2? [y/n]: " bbr2
 default_bbr2="y"
 
 while [[ -z "$bbr2" ]]; do
-    limit_user="$default_bbr2"
+    bbr2="$default_bbr2"
 done
 
 if [[ "$bbr2" == "y" || "$bbr2" == "Y" ]]; then
@@ -162,8 +162,6 @@ if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
     cd V2IpLimit
 
     cd Marzban
-
-    clear
 
     default_limit_number=2
     read -p "Enter the limit number: " limit_number
