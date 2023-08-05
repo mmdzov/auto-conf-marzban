@@ -106,13 +106,26 @@ if [[ -z $bbr2 ]]; then
     bbr2="$default_bbr2"
 fi
 
-if [[ "$bbr2" == "y" || "$bbr2" == "Y" ]]; then
-
-    wget --no-check-certificate -q -O bbr2.sh "https://github.com/yeyingorg/bbr2.sh/raw/master/bbr2.sh" && chmod +x bbr2.sh && bash bbr2.sh
-
-    clear
-
+if [[ -n $domain && ! -d "/etc/letsencrypt/live/$domain" ]]; then
+    sudo apt-get install certbot -y
+    certbot certonly --standalone --agree-tos --register-unsafely-without-email -d "$domain"
+    certbot renew --dry-run
 fi
+
+if [[ ! -f "/root/bbr2.sh" ]]; then
+
+    if [[ "$bbr2" == "y" || "$bbr2" == "Y" ]]; then
+
+        wget --no-check-certificate -q -O bbr2.sh "https://github.com/yeyingorg/bbr2.sh/raw/master/bbr2.sh" && chmod +x bbr2.sh && bash bbr2.sh
+
+        clear
+
+    fi
+
+else 
+    echo "This tool is already installed"
+fi
+
 
 # Limit users
 read -p "Do you want to limit the number of connected users? [y/n]: " limit_user
@@ -125,19 +138,26 @@ fi
 
 if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
 
-    sudo apt update
+    if [[ ! -d "/root/V2IpLimit" ]]; then
 
-    apt install python3-pip
+        sudo apt update
 
-    pip install websockets
+        apt install python3-pip
 
-    pip install pytz
+        pip install websockets
 
-    git clone https://github.com/houshmand-2005/V2IpLimit.git
+        pip install pytz
 
-    cd V2IpLimit
+        git clone https://github.com/houshmand-2005/V2IpLimit.git
 
-    cd Marzban
+        cd V2IpLimit
+
+        cd Marzban
+
+    else 
+        cd /root/V2IpLimit/Marzban
+    fi
+    
 
     default_limit_number=2
     read -p "Enter the limit number: " limit_number
