@@ -112,9 +112,15 @@ clear
 
 cd
 
+
 # Install BBR2
-bbr2="y"
-read -p "Do you want to limit the number of connected users? [y/n]: " bbr2
+read -p "Do you want to install bbr2? [y/n]: " bbr2
+
+default_bbr2="y"
+
+while [[ -z "$bbr2" ]]; do
+    limit_user="$default_bbr2"
+done
 
 if [[ "$bbr2" == "y" || "$bbr2" == "Y" ]]; then
 
@@ -133,8 +139,13 @@ if [[ "$bbr2" == "y" || "$bbr2" == "Y" ]]; then
 fi
 
 # Limit users
-limit_user="y"
 read -p "Do you want to limit the number of connected users? [y/n]: " limit_user
+
+default_limit_user="y"
+
+while [[ -z "$limit_user" ]]; do
+    limit_user="$default_limit_user"
+done
 
 if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
 
