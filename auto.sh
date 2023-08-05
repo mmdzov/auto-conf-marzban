@@ -204,3 +204,5 @@ rm -rf routing.json
 
 echo "\r"
 echo "Happy hacking :)"
+
+sudo marzban restart
