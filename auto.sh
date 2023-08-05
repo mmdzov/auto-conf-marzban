@@ -23,22 +23,16 @@ privkey="/etc/letsencrypt/live/example.com/privkey.pem"
 
 read -p "Please enter your domain.com/sub.domain.com: " domain
 
+pubkey="/etc/letsencrypt/live/$domain/fullchain.pem"
+privkey="/etc/letsencrypt/live/$domain/privkey.pem"
 
 if [[ -n $domain && ! -d "/etc/letsencrypt/live/$domain" ]]; then
-    
     sudo apt-get install certbot -y
     certbot certonly --standalone --agree-tos --register-unsafely-without-email -d "$domain"
     certbot renew --dry-run
-    
-    pubkey="/etc/letsencrypt/live/$domain/fullchain.pem"
-    privkey="/etc/letsencrypt/live/$domain/privkey.pem"
-    
 fi
 
 if [[ -n $domain ]]; then 
-    pubkey="/etc/letsencrypt/live/$domain/fullchain.pem"
-    privkey="/etc/letsencrypt/live/$domain/privkey.pem"
-
     mkdir /var/lib/marzban/certs
 
     cp "$pubkey" /var/lib/marzban/certs/fullchain.pem
