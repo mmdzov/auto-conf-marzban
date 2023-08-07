@@ -134,10 +134,15 @@ if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
 
     read -p "Enter the limit number: " limit_number
 
+    clear
+
     read -p "Enter the panel username: " Username
+
+    clear
+
     read -sp "Enter the panel password: " Password
 
-    echo "Username: $Username ، password: $Password"
+    clear
 
     if [[ ! -d "/root/V2IpLimit" ]]; then
 
@@ -158,8 +163,6 @@ if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
     fi
     
 
-
-
     v2iplimit_file="v2iplimit_config.json"
 
 
@@ -178,7 +181,7 @@ if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
 
 fi
 
-
+clear
 
 
 # Remove extra files
@@ -187,7 +190,7 @@ rm -rf tmp.json
 rm -rf outbounds.json
 rm -rf routing.json
 
-
+clear
 
 cat << EOF
 Happy hacking :)
