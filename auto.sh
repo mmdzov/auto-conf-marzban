@@ -134,7 +134,6 @@ if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
 
     read -p "Enter the limit number: " limit_number
 
-
     read -p "Enter the panel username: " Username
     read -sp "Enter the panel password: " Password
 
@@ -163,7 +162,9 @@ if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
 
     v2iplimit_file="v2iplimit_config.json"
 
-    jq '.LIMIT_NUMBER = $limit_number' --arg limit_number "$limit_number" $v2iplimit_file > tmp.json && mv tmp.json $v2iplimit_file
+    # jq '.LIMIT_NUMBER = $limit_number' --arg limit_number $limit_number $v2iplimit_file > tmp.json && mv tmp.json $v2iplimit_file
+
+    sed -i "s/\"LIMIT_NUMBER\": [0-9]*/\"LIMIT_NUMBER\": $limit_number/" $v2iplimit_file
 
     # jq ".LIMIT_NUMBER = $limit_number" $v2iplimit_file > tmp.json 
     jq '.PANEL_USERNAME = "'"$Username"'"' $v2iplimit_file > tmp.json 
@@ -172,9 +173,9 @@ if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
 
     mv tmp.json $v2iplimit_file
 
-    screen
+    # screen
 
-    python3 v2_ip_limit.py
+    # python3 v2_ip_limit.py
 
 fi
 
