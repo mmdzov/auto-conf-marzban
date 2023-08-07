@@ -69,6 +69,8 @@ env_file="/opt/marzban/.env"
 
 read -p "Please enter your port: " port
 
+clear
+
 if [[ -z $port ]]; then 
     port=8000
 fi
@@ -81,7 +83,12 @@ sed -i 's/# UVICORN_SSL_KEYFILE = "\/var\/lib\/marzban\/certs\/example.com\/key.
 sed -i 's/# XRAY_ASSETS_PATH = "\/usr\/local\/share\/xray"/XRAY_ASSETS_PATH = "\/var\/lib\/marzban\/assets\/"/' $env_file
 
 read -p "Please enter your telegram api token: " telegram_api_token
+
+clear
+
 read -p "Please enter your telegram user id: " telegram_user_id
+
+clear
 
 if [[ -n $telegram_api_token ]]; then
     sed -i 's/# TELEGRAM_API_TOKEN = "123456789:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/TELEGRAM_API_TOKEN = "'"$telegram_api_token"'"/' $env_file
