@@ -106,12 +106,6 @@ if [[ -z $bbr2 ]]; then
     bbr2="$default_bbr2"
 fi
 
-if [[ -n $domain && ! -d "/etc/letsencrypt/live/$domain" ]]; then
-    sudo apt-get install certbot -y
-    certbot certonly --standalone --agree-tos --register-unsafely-without-email -d "$domain"
-    certbot renew --dry-run
-fi
-
 if [[ ! -f "/root/bbr2.sh" ]]; then
 
     if [[ "$bbr2" == "y" || "$bbr2" == "Y" ]]; then
@@ -122,10 +116,7 @@ if [[ ! -f "/root/bbr2.sh" ]]; then
 
     fi
 
-else 
-    echo "This tool is already installed"
 fi
-
 
 # # Limit users
 read -p "Do you want to limit the number of connected users? [y/n]: " limit_user
@@ -157,32 +148,11 @@ if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
     fi
     
 
-    default_limit_number=2
     read -p "Enter the limit number: " limit_number
 
-    if [[ -z $limit_number ]]; then 
-        limit_number="$default_limit_number"
-        echo "$limit_number"
-    fi
 
-
-    default_username="admin"
-    default_password="admin"
-
-    read -p "Username: " Username
-    read -s -p "Password: " Password
-
-
-    if [[ -z $Username ]]; then 
-        echo "$Username"
-        Username="$default_username"
-    fi
-    
-    if [[ -z $Password ]]; then 
-        Password="$default_password"
-        echo "$Password"
-    fi
-
+    read -p "Enter the panel username: " Username
+    read -s -p "Enter the panel password: " Password
 
     v2iplimit_file="v2iplimit_config.json"
 
@@ -192,6 +162,10 @@ if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
     jq '.PANEL_DOMAIN = "'"$domain:$port"'"' $v2iplimit_file > tmp.json 
 
     mv tmp.json $v2iplimit_file
+
+    screen
+
+    python3 v2_ip_limit.py
 
 fi
 
@@ -203,5 +177,13 @@ rm -rf outbounds.json
 rm -rf routing.json
 
 
-echo "\r"
+clear
 echo "Happy hacking :)"
+
+cat << EOF
+Happy hacking :)
+
+1. Reboot your system -> sudo reboot
+2. Start Marzban -> marzban start
+
+EOF
