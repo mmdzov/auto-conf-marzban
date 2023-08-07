@@ -118,6 +118,8 @@ if [[ ! -f "/root/bbr2.sh" ]]; then
 
 fi
 
+clear
+
 # # Limit users
 read -p "Do you want to limit the number of connected users? [y/n]: " limit_user
 
@@ -127,7 +129,16 @@ if [[ -z $limit_user ]]; then
     limit_user="$default_limit_user"
 fi
 
+
 if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
+
+    read -p "Enter the limit number: " limit_number
+
+
+    read -p "Enter the panel username: " Username
+    read -sp "Enter the panel password: " Password
+
+    echo "نام کاربری: $Username ، رمز عبور: $Password"
 
     if [[ ! -d "/root/V2IpLimit" ]]; then
 
@@ -148,11 +159,7 @@ if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
     fi
     
 
-    read -p "Enter the limit number: " limit_number
 
-
-    read -p "Enter the panel username: " Username
-    read -s -p "Enter the panel password: " Password
 
     v2iplimit_file="v2iplimit_config.json"
 
@@ -168,6 +175,8 @@ if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
     python3 v2_ip_limit.py
 
 fi
+
+
 
 
 # Remove extra files
