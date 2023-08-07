@@ -138,7 +138,7 @@ if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
     read -p "Enter the panel username: " Username
     read -sp "Enter the panel password: " Password
 
-    echo "نام کاربری: $Username ، رمز عبور: $Password"
+    echo "Username: $Username ، password: $Password"
 
     if [[ ! -d "/root/V2IpLimit" ]]; then
 
@@ -163,7 +163,9 @@ if [[ "$limit_user" == "y" || "$limit_user" == "Y" ]]; then
 
     v2iplimit_file="v2iplimit_config.json"
 
-    jq ".LIMIT_NUMBER = $limit_number" $v2iplimit_file > tmp.json 
+    jq '.LIMIT_NUMBER = $limit_number' --arg limit_number "$limit_number" $v2iplimit_file > tmp.json && mv tmp.json $v2iplimit_file
+
+    # jq ".LIMIT_NUMBER = $limit_number" $v2iplimit_file > tmp.json 
     jq '.PANEL_USERNAME = "'"$Username"'"' $v2iplimit_file > tmp.json 
     jq '.PANEL_PASSWORD = "'"$Password"'"' $v2iplimit_file > tmp.json 
     jq '.PANEL_DOMAIN = "'"$domain:$port"'"' $v2iplimit_file > tmp.json 
@@ -186,7 +188,6 @@ rm -rf outbounds.json
 rm -rf routing.json
 
 
-clear
 
 cat << EOF
 Happy hacking :)
