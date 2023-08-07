@@ -178,7 +178,6 @@ rm -rf routing.json
 
 
 clear
-echo "Happy hacking :)"
 
 cat << EOF
 Happy hacking :)
